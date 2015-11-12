@@ -1,29 +1,35 @@
+
+
+
 <?php
-if(isset($_POST["submit"])){
-// Checking For Blank Fields..
-if($_POST["name"]==""||$_POST["email"]==""||$_POST["subject"]==""||$_POST["message"]==""){
-echo "Fill All Fields..";
-}else{
-// Check if the "Sender's Email" input field is filled out
-$email=$_POST['email'];
-// Sanitize E-mail Address
-$email =filter_var($email, FILTER_SANITIZE_EMAIL);
-// Validate E-mail Address
-$email= filter_var($email, FILTER_VALIDATE_EMAIL);
-if (!$email){
-echo "Invalid Sender's Email";
+$field_name = $_POST['name'];
+$field_email = $_POST['email'];
+$field_message = $_POST['message'];
+
+$mail_to = 'nathiyamegan@gmail.com';
+$subject = 'Message from a site visitor '.$field_name;
+
+$body_message = 'From: '.$field_name."\n";
+$body_message .= 'E-mail: '.$field_email."\n";
+$body_message .= 'Message: '.$field_message;
+
+$headers = 'From: '.$field_email."\r\n";
+$headers .= 'Reply-To: '.$field_email."\r\n";
+
+$mail_status = mail($mail_to, $subject, $body_message, $headers);
+
+if ($mail_status) { ?>
+	<script language="javascript" type="text/javascript">
+		alert('Thank you for the message. We will contact you shortly.');
+		window.location = 'contact_us.html';
+	</script>
+<?php
 }
-else{
-$subject = $_POST['subject'];
-$message = $_POST['message'];
-$headers = 'From:'. $email2 . "\r\n"; // Sender's Email
-$headers .= 'Cc:'. $email2 . "\r\n"; // Carbon copy to Sender
-// Message lines should not exceed 70 characters (PHP rule), so wrap it
-$message = wordwrap($message, 70);
-// Send Mail By PHP Mail Function
-mail("nathiyamegan@gmail.com", $subject, $message, $headers);
-echo "Your mail has been sent successfuly ! Thank you for your feedback";
-}
-}
+else { ?>
+	<script language="javascript" type="text/javascript">
+		alert('Message failed. Please, send an email to gordon@template-help.com');
+		window.location = 'contact_us.html';
+	</script>
+<?php
 }
 ?>
