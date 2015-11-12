@@ -1,32 +1,25 @@
 <?php
-$field_name = $_POST['name'];
-$field_email = $_POST['email'];
-$field_message = $_POST['message'];
-
-$mail_to = 'nathiyamegan@gmail.com';
-$subject = 'Message from a site visitor '.$field_name;
-
-$body_message = 'From: '.$field_name."\n";
-$body_message = 'E-mail: '.$field_email."\n";
-$body_message = 'Message: '.$field_message;
-
-$headers = 'From: '.$field_email."\r\n";
-$headers = 'Reply-To: '.$field_email."\r\n";
-
-$mail_status = mail($mail_to, $subject, $body_message, $headers);
-
-if ($mail_status) { ?>
-	<script language="javascript" type="text/javascript">
-		alert('Thank you for the message. We will contact you shortly.');
-		window.location = 'contact_us.html';
-	</script>
-<?php
+if(!isset($_POST['submit']))
+{
+	//This page should not be accessed directly. Need to submit the form.
+	echo "error; you need to submit the form!";
 }
-else { ?>
-	<script language="javascript" type="text/javascript">
-		alert('Message failed. Please, send an email to gordon@template-help.com');
-		window.location = 'contact_us.html';
-	</script>
-<?php
-}
-?>
+$name = $_POST['name'];
+$visitor_email = $_POST['email'];
+$message = $_POST['message'];
+
+
+$email_from = 'nathiyamegan@gmail.com';//<== update the email address
+$email_subject = "New Form submission";
+$email_body = "You have received a new message from the user $name.\n".
+    "Here is the message:\n $message".
+    
+$to = "nathiyamegan@gmail.com";//<== update the email address
+$headers = "From: $email_from \r\n";
+$headers .= "Reply-To: $visitor_email \r\n";
+//Send the email!
+mail($to,$email_subject,$email_body,$headers);
+//done. redirect to thank-you page.
+header('Location: thank-you.html');
+   
+?> 
